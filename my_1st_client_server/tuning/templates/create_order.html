@@ -1,0 +1,16 @@
+<!-- create_order.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Создание заказа</title>
+</head>
+<body>
+    <h2>Создание нового заказа</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Создать заказ</button>
+    </form>
+    <a href="{% url 'admin_panel' %}">Вернуться в панель администратора</a>
+</body>
+</html>
