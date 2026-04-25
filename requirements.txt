@@ -1,1 +1,18 @@
-# Тут должны все быть все необходимые библиотеки и их зависимости
+Django==6.0.4
+djangorestframework==3.14.0
+pytest==7.2.2
+pytest-django==4.5.2
+django-cors-headers==3.13.0
+django-jsonfield==3.1.0
+black==23.3.0
+isort==5.12.0
+flake8==6.0.0
+django-extensions==3.2.1
+django-debug-toolbar==3.8.0
+sqlparse==0.4.3
+pytz==2023.3
+PyJWT==2.6.0
+Pillow==9.4.0
+djangorestframework-simplejwt==5.2.2
+psycopg2-binary==2.9.5
+mysqlclient==2.1.1
