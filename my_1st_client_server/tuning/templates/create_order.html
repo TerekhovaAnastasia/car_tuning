@@ -2,15 +2,530 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Создание заказа</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-icon { font-size: 48px; margin-bottom: 10px; }
+
+        h2 { color: #333; font-size: 26px; font-weight: 600; }
+
+        .subtitle { color: #888; font-size: 14px; margin-top: 5px; }
+
+        form { display: flex; flex-direction: column; gap: 20px; }
+
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .form-section h3 {
+            color: #495057;
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group:last-child { margin-bottom: 0; }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: white;
+            color: #333;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input::placeholder { color: #aaa; }
+        .form-group small { color: #888; font-size: 12px; display: block; margin-top: 5px; }
+
+        .readonly-field {
+            background: #f0f0f0 !important;
+            border-color: #ddd !important;
+            color: #666 !important;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            text-align: center;
+            color: #888;
+            margin: 5px 0;
+            font-weight: 600;
+        }
+
+        .tuning-options { display: flex; flex-direction: column; gap: 12px; }
+
+        .tuning-option {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 14px 16px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tuning-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .tuning-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f0f4ff 0%, #f8f9ff 100%);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+        }
+
+        .tuning-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .tuning-option label {
+            flex: 1;
+            cursor: pointer;
+            font-weight: 500;
+            color: #333;
+            margin: 0;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .price-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .price-calculation {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 15px;
+        }
+
+        .price-row.total {
+            font-size: 22px;
+            font-weight: 700;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+
+        .price-row span:last-child { font-weight: 600; }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-submit:active { transform: translateY(0); }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover { color: #764ba2; text-decoration: underline; }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .errorlist {
+            list-style: none;
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 5px;
+            padding: 8px 12px;
+            background: #ffeaea;
+            border-radius: 6px;
+            border-left: 3px solid #e74c3c;
+        }
+
+        .nonfield-errors {
+            background: #ffeaea;
+            color: #e74c3c;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 25px; }
+            h2 { font-size: 22px; }
+            .price-row { font-size: 14px; }
+            .price-row.total { font-size: 18px; }
+        }
+    </style>
 </head>
 <body>
-    <h2>Создание нового заказа</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Создать заказ</button>
-    </form>
-    <a href="{% url 'admin_panel' %}">Вернуться в панель администратора</a>
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">📋</div>
+            <h2>Создание нового заказа</h2>
+            <p class="subtitle">Введите VIN автомобиля и выберите опции тюнинга</p>
+        </div>
+
+        <form method="POST" id="orderForm">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="nonfield-errors">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <!-- Данные заказа -->
+            <div class="form-section">
+                <h3>📝 Данные заказа</h3>
+
+                {% if user.is_superuser %}
+                <div class="form-group">
+                    <label>👤 Пользователь</label>
+                    {{ form.user }}
+                    {{ form.user.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label>🚗 Выбрать автомобиль</label>
+                    {{ form.car }}
+                    {{ form.car.errors }}
+                    <small>Выберите из списка существующих</small>
+                </div>
+
+                <div class="divider">— ИЛИ —</div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label>🚗 VIN автомобиля</label>
+                    {{ form.vin_id }}
+                    {{ form.vin_id.errors }}
+                    <small>🔍 Введите VIN для поиска или создания авто</small>
+                </div>
+
+                <div class="form-group">
+                    <label>💰 Базовая цена (₽)</label>
+                    {{ form.base_price }}
+                    {{ form.base_price.errors }}
+                    <small>Оставьте пустым для автозаполнения</small>
+                </div>
+
+                <div class="form-group">
+                    <label>🔧 Выбранные опции</label>
+                    <input type="text" id="tuning_options_display" class="readonly-field"
+                           placeholder="Опции не выбраны" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>💵 Итоговая цена</label>
+                    <input type="text" id="total_price_display" class="readonly-field"
+                           value="0 ₽" readonly>
+                </div>
+            </div>
+
+            <!-- Выбор опций тюнинга -->
+            <div class="form-section">
+                <h3>🔧 Опции тюнинга</h3>
+                <div class="tuning-options">
+                    <div class="tuning-option" onclick="toggleOption('engine')">
+                        <input type="checkbox" id="engine" value="engine">
+                        <label>Улучшение двигателя</label>
+                        <span class="price-badge">+50%</span>
+                    </div>
+                    <div class="tuning-option" onclick="toggleOption('nitrous')">
+                        <input type="checkbox" id="nitrous" value="nitrous">
+                        <label>Закись азота</label>
+                        <span class="price-badge">+100 000 ₽</span>
+                    </div>
+                    <div class="tuning-option" onclick="toggleOption('turbine')">
+                        <input type="checkbox" id="turbine" value="turbine">
+                        <label>Турбонаддув</label>
+                        <span class="price-badge">+50 000 ₽</span>
+                    </div>
+                    <div class="tuning-option" onclick="toggleOption('sound')">
+                        <input type="checkbox" id="sound" value="sound">
+                        <label>Звуковая система</label>
+                        <span class="price-badge">+20%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Скрытые поля -->
+            {{ form.tuning_options }}
+            {{ form.total_price }}
+
+            <!-- Расчёт цены -->
+            <div class="price-calculation" id="priceCalculation" style="display: none;">
+                <div class="price-row">
+                    <span>📌 Базовая цена:</span>
+                    <span id="basePriceDisplay">0 ₽</span>
+                </div>
+                <div class="price-row">
+                    <span>🔧 Опции тюнинга:</span>
+                    <span id="optionsPriceDisplay">0 ₽</span>
+                </div>
+                <div class="price-row total">
+                    <span>💎 Итого:</span>
+                    <span id="totalPriceDisplay">0 ₽</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">✅ Создать заказ</button>
+        </form>
+
+        <div class="footer">
+            {% if user.is_superuser %}
+            <a href="{% url 'admin_panel' %}" class="back-link">← Вернуться в панель администратора</a>
+            {% else %}
+            <a href="/user-page/" class="back-link">← Вернуться в личный кабинет</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function showNotification(message, type) {
+            const n = document.createElement('div');
+            n.style.cssText = 'position:fixed;top:20px;right:20px;padding:15px 20px;border-radius:8px;color:white;font-weight:500;z-index:1000;animation:slideIn 0.3s ease;max-width:400px;box-shadow:0 8px 20px rgba(0,0,0,0.2);';
+            n.style.background = type === 'success' ? 'linear-gradient(135deg,#11998e,#38ef7d)' :
+                                 type === 'info' ? 'linear-gradient(135deg,#667eea,#764ba2)' :
+                                 'linear-gradient(135deg,#eb3349,#f45c43)';
+            n.textContent = message;
+            document.body.appendChild(n);
+            setTimeout(() => {
+                n.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => n.remove(), 300);
+            }, 3000);
+        }
+
+        function toggleOption(id) {
+            const cb = document.getElementById(id);
+            cb.checked = !cb.checked;
+            updateForm();
+        }
+
+        function updateForm() {
+            const basePrice = parseInt(document.getElementById('id_base_price')?.value) || 0;
+            let mult = 0, add = 0;
+            const selected = [];
+
+            const opts = [
+                {id:'engine', name:'Улучшение двигателя', m:0.5, a:0},
+                {id:'nitrous', name:'Закись азота', m:0, a:100000},
+                {id:'turbine', name:'Турбонаддув', m:0, a:50000},
+                {id:'sound', name:'Звуковая система', m:0.2, a:0}
+            ];
+
+            opts.forEach(o => {
+                const cb = document.getElementById(o.id);
+                const div = cb?.closest('.tuning-option');
+                if (cb?.checked) {
+                    mult += o.m; add += o.a;
+                    selected.push(o.name);
+                    div?.classList.add('selected');
+                } else {
+                    div?.classList.remove('selected');
+                }
+            });
+
+            const optTotal = Math.round(basePrice * mult) + add;
+            const final = basePrice + optTotal;
+
+            const disp = document.getElementById('tuning_options_display');
+            if (disp) {
+                disp.value = selected.length ? selected.join(', ') : '';
+                disp.placeholder = selected.length ? '' : 'Опции не выбраны';
+            }
+
+            const totalDisp = document.getElementById('total_price_display');
+            if (totalDisp) totalDisp.value = final.toLocaleString() + ' ₽';
+
+            const block = document.getElementById('priceCalculation');
+            if (block) {
+                if (basePrice > 0) {
+                    block.style.display = 'block';
+                    document.getElementById('basePriceDisplay').textContent = basePrice.toLocaleString() + ' ₽';
+                    document.getElementById('optionsPriceDisplay').textContent = (optTotal>0?'+':'') + optTotal.toLocaleString() + ' ₽';
+                    document.getElementById('totalPriceDisplay').textContent = final.toLocaleString() + ' ₽';
+                } else {
+                    block.style.display = 'none';
+                }
+            }
+
+            const hiddenOpts = document.getElementById('id_tuning_options');
+            const hiddenTotal = document.getElementById('id_total_price');
+            if (hiddenOpts) hiddenOpts.value = JSON.stringify(selected);
+            if (hiddenTotal) hiddenTotal.value = final;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('id_base_price')?.addEventListener('input', updateForm);
+
+            document.querySelectorAll('.tuning-option input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', updateForm);
+            });
+
+            // Выбор авто из списка → подтянуть цену
+            const carSel = document.getElementById('id_car');
+            if (carSel) {
+                carSel.addEventListener('change', function() {
+                    const id = this.value;
+                    if (id) {
+                        fetch('/api/cars/' + id + '/')
+                            .then(r => r.json())
+                            .then(d => {
+                                document.getElementById('id_base_price').value = d.base_price || 500000;
+                                updateForm();
+                                showNotification('✅ Авто выбрано. Цена: ' + (d.base_price||500000).toLocaleString() + ' ₽', 'success');
+                            })
+                            .catch(() => showNotification('⚠️ Ошибка загрузки', 'error'));
+                    }
+                });
+            }
+
+            // Поиск по VIN
+            const vin = document.getElementById('id_vin_id');
+            if (vin) {
+                vin.addEventListener('blur', function() {
+                    const v = this.value.trim();
+                    if (v) {
+                        fetch('/api/cars/?search=' + v)
+                            .then(r => r.json())
+                            .then(d => {
+                                if (d.length && d[0].base_price) {
+                                    document.getElementById('id_base_price').value = d[0].base_price;
+                                    updateForm();
+                                    showNotification('✅ Найдено! Цена: ' + d[0].base_price.toLocaleString() + ' ₽', 'success');
+                                } else {
+                                    document.getElementById('id_base_price').value = 500000;
+                                    updateForm();
+                                    showNotification('🆕 Новое авто. Цена: 500 000 ₽', 'info');
+                                }
+                            })
+                            .catch(() => {
+                                document.getElementById('id_base_price').value = 500000;
+                                updateForm();
+                            });
+                    }
+                });
+            }
+
+            updateForm();
+        });
+    </script>
 </body>
 </html>

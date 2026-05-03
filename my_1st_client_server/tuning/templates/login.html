@@ -3,86 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Авторизация</title>
+    <title>Авторизация | Центр тюнинга</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            padding: 20px;
         }
 
         .login-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 350px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .login-header {
-            margin-bottom: 20px;
             text-align: center;
+            margin-bottom: 35px;
         }
 
-        .form-group {
+        .login-icon {
+            font-size: 60px;
             margin-bottom: 15px;
         }
 
-        label {
+        .login-header h2 {
+            font-size: 28px;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
             display: block;
-            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        .input-wrapper {
+            position: relative;
         }
 
-        button {
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #aaa;
+            pointer-events: none;
+        }
+
+        .form-group input {
             width: 100%;
-            padding: 10px;
-            background-color: #333;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            color: #333;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #bbb;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 15px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
         }
 
-        button:hover {
-            background-color: #555;
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #667eea;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            background: #ffeaea;
+            color: #e74c3c;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 35px 25px;
+            }
+
+            .login-header h2 {
+                font-size: 24px;
+            }
+
+            .login-icon {
+                font-size: 50px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-header">
+            <div class="login-icon">🔐</div>
             <h2>Авторизация</h2>
+            <p>Войдите в личный кабинет для оформления заказов</p>
         </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="error-message">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
         <form method="POST" action="{% url 'login' %}">
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="username">Логин:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username">Логин</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Введите ваш логин"
+                        required
+                        autofocus
+                    >
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="password">Пароль:</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password">Пароль</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Введите ваш пароль"
+                        required
+                    >
+                </div>
             </div>
 
-            <button type="submit">Войти</button>
+            <button type="submit" class="btn-login">🚀 Войти</button>
         </form>
+
+        <a href="{% url 'home' %}" class="back-link">← Вернуться на главную</a>
     </div>
 </body>
 </html>

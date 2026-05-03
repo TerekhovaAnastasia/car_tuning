@@ -1,0 +1,4 @@
+Django==6.0.4
+djangorestframework==3.16.0
+pytest==8.4.2
+pytest-django==4.10.0

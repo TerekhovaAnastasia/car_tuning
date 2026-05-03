@@ -3,111 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тюнинг автомобилей</title>
+    <title>Центр тюнинга автомобилей</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            box-sizing: border-box;
         }
 
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Шапка */
         .header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-        }
-
-        .login-link {
-            position: absolute;
-            right: 20px;
-            top: 10px;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
             background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .form-group {
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 40px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .logo span {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            font-weight: 400;
+        }
+
+        .btn-login {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Контент */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Главный баннер */
+        .hero {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .hero h2 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-outline {
+            padding: 14px 28px;
+            border: 2px solid #667eea;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Карточки услуг */
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+        }
+
+        .service-icon {
+            font-size: 50px;
             margin-bottom: 15px;
         }
 
-        label {
-            display: block;
+        .service-card h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .service-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Блок мастеров */
+        .masters {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .masters h2 {
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .masters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .master-card {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .master-card:hover {
+            background: linear-gradient(135deg, #f0f4ff, #f8f9ff);
+            transform: translateY(-3px);
+        }
+
+        .master-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+
+        .master-card h4 {
+            font-size: 16px;
+            color: #333;
             margin-bottom: 5px;
         }
 
-        input, select, textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
+        .master-card p {
+            font-size: 13px;
+            color: #888;
         }
 
-        button {
-            background-color: #333;
+        /* Блок с телефоном */
+        .contact {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
             color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: slideUp 1s ease-out;
         }
 
-        button:hover {
-            background-color: #555;
+        .contact-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .contact h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .contact p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .phone-number {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .phone-label {
+            font-size: 14px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Футер */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero {
+                padding: 30px 20px;
+            }
+
+            .hero h2 {
+                font-size: 26px;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
+
+            .phone-number {
+                font-size: 28px;
+            }
+
+            .masters-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Шапка -->
     <div class="header">
-        <div class="login-link">
-            <a href="{% url 'login' %}" style="color: white; text-decoration: none;">
-                <i class="fa fa-user">Войти</i>
-            </a>
+        <div class="logo">
+            <div class="logo-icon">🏎️</div>
+            <div>
+                <h1>Центр тюнинга автомобилей</h1>
+                <span>Профессиональный автотюнинг с 2005 года</span>
+            </div>
         </div>
-        <h1>Центр тюнинга автомобилей</h1>
+
+        {% if user.is_authenticated %}
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span style="color: #333; font-weight: 500;">👋 {{ user.username }}</span>
+                {% if user.is_superuser %}
+                <a href="{% url 'admin_panel' %}" class="btn-login">📊 Панель</a>
+                {% else %}
+                <a href="{% url 'user_page' %}" class="btn-login">📋 Мои заказы</a>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="btn-outline" style="padding: 10px 20px;">🚪 Выйти</a>
+            </div>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn-login">🔐 Войти</a>
+        {% endif %}
     </div>
 
+    <!-- Контент -->
     <div class="container">
-        <h2>Загрузка данных автомобиля</h2>
-        <form>
-            <div class="form-group">
-                <label for="vin">VIN-номер:</label>
-                <input type="text" id="vin" required>
+        <!-- Главный блок -->
+        <div class="hero">
+            <div class="hero-icon">🔧</div>
+            <h2>Добро пожаловать в мир автотюнинга!</h2>
+            <p>
+                Мы превращаем обычные автомобили в произведения искусства.
+                Улучшение двигателя, установка турбонаддува, закись азота,
+                профессиональная звуковая система — всё это и многое другое
+                ждёт вас в нашем центре тюнинга.
+            </p>
+            <div class="hero-buttons">
+                {% if user.is_authenticated %}
+                <a href="{% url 'create_order' %}" class="btn-primary">➕ Создать заказ</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn-primary">🔐 Войти и заказать</a>
+                {% endif %}
+                <a href="#services" class="btn-outline">🔍 Наши услуги</a>
             </div>
-            <div class="form-group">
-                <label for="basePrice">Базовая цена:</label>
-                <input type="number" id="basePrice" required>
+        </div>
+
+        <!-- Услуги -->
+        <div class="services" id="services">
+            <div class="service-card">
+                <div class="service-icon">🚀</div>
+                <h3>Улучшение двигателя</h3>
+                <p>Чип-тюнинг, форсирование и доработка мотора. Увеличение мощности до 50% от базовой.</p>
             </div>
-            <div class="form-group">
-                <label for="description">Описание:</label>
-                <textarea id="description" rows="3"></textarea>
+            <div class="service-card">
+                <div class="service-icon">💨</div>
+                <h3>Закись азота</h3>
+                <p>Установка системы NOS для максимального ускорения. +100 000 ₽ к стоимости.</p>
             </div>
-
-            <!-- Опции тюнинга -->
-            <h3>Выберите опции тюнинга:</h3>
-            <div class="form-group">
-                <input type="checkbox" id="engine" name="tuningOptions">
-                <label for="engine">Улучшение двигателя (+50%)</label><br>
-
-                <input type="checkbox" id="nitrous" name="tuningOptions">
-                <label for="nitrous">Закись азота (+100000)</label><br>
-
-                <input type="checkbox" id="turbine" name="tuningOptions">
-                <label for="turbine">Турбо (+50000)</label><br>
-
-                <input type="checkbox" id="sound" name="tuningOptions">
-                <label for="sound">Звуковая система (+20%)</label>
+            <div class="service-card">
+                <div class="service-icon">⚡</div>
+                <h3>Турбонаддув</h3>
+                <p>Монтаж турбокомпрессора для впечатляющей динамики. Фиксированная цена +50 000 ₽.</p>
             </div>
+            <div class="service-card">
+                <div class="service-icon">🎵</div>
+                <h3>Звуковая система</h3>
+                <p>Профессиональный автозвук с кристальной чистотой. +20% к базовой цене авто.</p>
+            </div>
+        </div>
 
-            <button type="submit">Отправить</button>
-        </form>
+        <!-- Мастера -->
+        <div class="masters">
+            <h2>👨‍🔧 Наши мастера</h2>
+            <div class="masters-grid">
+                <div class="master-card">
+                    <div class="master-avatar">👨‍🔧</div>
+                    <h4>Алексей Петров</h4>
+                    <p>Главный инженер<br>Опыт 25 лет</p>
+                </div>
+                <div class="master-card">
+                    <div class="master-avatar">👨‍💻</div>
+                    <h4>Дмитрий Иванов</h4>
+                    <p><br>Опыт 10 лет</p>
+                </div>
+                <div class="master-card">
+                    <div class="master-avatar">👨‍🏭</div>
+                    <h4>Сергей Смирнов</h4>
+                    <p><br>Опыт 12 лет</p>
+                </div>
+                <div class="master-card">
+                    <div class="master-avatar">👨‍🎤</div>
+                    <h4>Андрей Волков</h4>
+                    <p><br>Опыт 8 лет</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Горячая линия -->
+        <div class="contact">
+            <div class="contact-icon">📞</div>
+            <h2>Горячая линия</h2>
+            <p>Звоните нам — мы ответим на все вопросы и поможем с выбором!</p>
+            <div class="phone-number">8 800 555-35-19</div>
+            <div class="phone-label">звонок бесплатный</div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <div class="footer">
+        © 2026 Центр тюнинга автомобилей. Все права защищены.
     </div>
 </body>
 </html>
