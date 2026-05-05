@@ -419,7 +419,13 @@
         }
 
         function updateForm() {
-            const basePrice = parseInt(document.getElementById('id_base_price')?.value) || 0;
+            let basePrice = parseInt(document.getElementById('id_base_price')?.value) || 0;
+
+            if (basePrice < 0) {
+                basePrice = 0;
+                document.getElementById('id_base_price').value = 0;
+                showNotification('⚠️ Цена не может быть отрицательной!', 'error');
+            }
             let mult = 0, add = 0;
             const selected = [];
 

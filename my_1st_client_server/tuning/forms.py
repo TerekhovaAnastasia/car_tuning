@@ -19,6 +19,10 @@ class OrderForm(forms.ModelForm):
         widgets = {
             'tuning_options': forms.HiddenInput(),
             'total_price': forms.HiddenInput(),
+            'base_price': forms.NumberInput(attrs={
+                'min': '0',
+                'placeholder': 'Например: 500000'
+            }),
         }
 
     def __init__(self, *args, **kwargs):
@@ -43,6 +47,23 @@ class OrderForm(forms.ModelForm):
             return int(data) if data else 0
         except:
             return 0
+
+    def clean_base_price(self):
+        base_price = self.cleaned_data.get('base_price')
+
+        if base_price is not None and base_price != '':
+            try:
+                base_price = int(base_price)
+            except (ValueError, TypeError):
+                raise forms.ValidationError('Цена должна быть числом')
+
+            if base_price < 0:
+                raise forms.ValidationError('Базовая цена не может быть отрицательной')
+
+            if base_price == 0:
+                raise forms.ValidationError('Базовая цена не может быть нулевой')
+
+        return base_price
 
     def clean(self):
         cleaned_data = super().clean()
