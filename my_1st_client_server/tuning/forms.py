@@ -31,48 +31,46 @@ class OrderForm(forms.ModelForm):
         self.fields['base_price'].required = False
         self.fields['tuning_options'].required = False
         self.fields['total_price'].required = False
+        self.fields['user'].required = False
 
     def clean_tuning_options(self):
         data = self.cleaned_data.get('tuning_options')
         if isinstance(data, str):
             try:
                 data = json.loads(data)
-            except:
-                data = []
+            except json.JSONDecodeError:
+                raise forms.ValidationError('Некорректный формат опций')
         return data if data else []
 
     def clean_total_price(self):
         data = self.cleaned_data.get('total_price')
         try:
-            return int(data) if data else 0
-        except:
-            return 0
+            price = int(data) if data else 0
+        except (ValueError, TypeError):
+            raise forms.ValidationError('Итоговая цена должна быть числом')
+        if price < 0:
+            raise forms.ValidationError('Итоговая цена не может быть отрицательной')
+        return price
 
     def clean_base_price(self):
         base_price = self.cleaned_data.get('base_price')
-
         if base_price is not None and base_price != '':
             try:
                 base_price = int(base_price)
             except (ValueError, TypeError):
                 raise forms.ValidationError('Цена должна быть числом')
-
             if base_price < 0:
                 raise forms.ValidationError('Базовая цена не может быть отрицательной')
-
             if base_price == 0:
                 raise forms.ValidationError('Базовая цена не может быть нулевой')
-
         return base_price
 
     def clean(self):
         cleaned_data = super().clean()
         vin = cleaned_data.get('vin_id')
         car = cleaned_data.get('car')
-
         if not vin and not car:
             raise forms.ValidationError('Введите VIN или выберите автомобиль из списка')
-
         return cleaned_data
 
     def save(self, commit=True):
@@ -80,7 +78,6 @@ class OrderForm(forms.ModelForm):
         vin = self.cleaned_data.get('vin_id')
         car = self.cleaned_data.get('car')
 
-        # Если введён VIN — ищем или создаём авто
         if vin:
             car, created = Car.objects.get_or_create(
                 vin_id=vin,
