@@ -326,22 +326,6 @@
             </div>
 
             {% if orders %}
-            <!-- Статистика -->
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number">{{ orders.count }}</div>
-                    <div class="stat-label">Всего заказов</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ orders.first.id }}</div>
-                    <div class="stat-label">Последний заказ №</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ orders.first.created_at|date:"d.m.Y" }}</div>
-                    <div class="stat-label">Дата последнего</div>
-                </div>
-            </div>
-
             <table>
                 <thead>
                     <tr>
@@ -356,9 +340,9 @@
                 <tbody>
                     {% for order in orders %}
                     <tr>
-                        <td><strong>#{{ order.id }}</strong></td>
+                        <td><strong>#{{ order.order_id }}</strong></td>
                         <td>
-                            <span class="vin-link">🚗 {{ order.car.vin_id }}</span>
+                            <span class="vin-link">🚗 {{ order.vin_id }}</span>
                         </td>
                         <td class="price">{{ order.base_price|floatformat:0 }} ₽</td>
                         <td>

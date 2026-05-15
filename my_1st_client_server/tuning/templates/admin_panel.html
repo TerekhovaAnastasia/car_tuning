@@ -345,23 +345,6 @@
             </div>
 
             {% if has_orders %}
-            <!-- Статистика -->
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number">{{ orders.count }}</div>
-                    <div class="stat-label">Всего заказов</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ orders.first.id }}</div>
-                    <div class="stat-label">Последний заказ №</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ orders.first.created_at|date:"d.m.Y" }}</div>
-                    <div class="stat-label">Дата последнего</div>
-                </div>
-            </div>
-
-            <!-- Таблица -->
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -378,13 +361,13 @@
                     <tbody>
                         {% for order in orders %}
                         <tr>
-                            <td><strong>#{{ order.id }}</strong></td>
+                            <td><strong>#{{ order.order_id }}</strong></td>
                             <td>
                                 <span class="user-badge {% if order.user.is_superuser %}superuser{% endif %}">
-                                    {{ order.user.username }}
+                                    {{ order.username }}
                                 </span>
                             </td>
-                            <td><span class="vin-code">🚗 {{ order.car.vin_id }}</span></td>
+                            <td><span class="vin-code">🚗 {{ order.vin_id }}</span></td>
                             <td class="price">{{ order.base_price|floatformat:0 }} ₽</td>
                             <td>
                                 {% if order.tuning_options %}
