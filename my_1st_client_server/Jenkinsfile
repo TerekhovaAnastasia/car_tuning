@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'dev', url: 'https://github.com/TerekhovaAnastasia/car_tuning.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'python manage.py test'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t car-tuning-app .'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'All tests passed! Docker image built!'
+        }
+        failure {
+            echo 'Tests failed! Check the logs.'
+        }
+    }
+}
