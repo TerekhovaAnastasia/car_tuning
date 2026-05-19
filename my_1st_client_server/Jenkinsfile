@@ -10,19 +10,19 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                bat 'pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'python manage.py test'
+                bat 'python manage.py test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t car-tuning-app .'
+                bat 'docker build -t car-tuning-app .'
             }
         }
     }
