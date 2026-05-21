@@ -8,21 +8,22 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                bat 'pip install -r requirements.txt'
-            }
-        }
-
         stage('Run Tests') {
             steps {
-                bat 'python manage.py test'
+                powershell '''
+                    $python = "C:\\Users\\Катя\\PycharmProjects\\PythonProject1\\.venv\\Scripts\\python.exe"
+                    cd "$env:WORKSPACE\\my_1st_client_server"
+                    & $python manage.py test
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t car-tuning-app .'
+                powershell '''
+                    cd "$env:WORKSPACE\\my_1st_client_server"
+                    docker build -t car-tuning-app .
+                '''
             }
         }
     }
@@ -32,7 +33,7 @@ pipeline {
             echo 'All tests passed! Docker image built!'
         }
         failure {
-            echo 'Tests failed! Check the logs.'
+            echo 'Tests failed or Docker build failed.'
         }
     }
 }
